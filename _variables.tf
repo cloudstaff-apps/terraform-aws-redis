@@ -107,7 +107,7 @@ variable "create_subnet_group" {
   default     = false
 }
 
-variable "subnet_group_ids" {
+variable "subnet_ids" {
   description = "List of Subnet IDs for the RDS Subnet Group"
   type        = list(any)
   default     = []
