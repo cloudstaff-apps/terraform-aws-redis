@@ -1,4 +1,5 @@
 resource "random_string" "redis_password" {
+  count   = var.transit_encryption_enabled ? 1 : 0
   length  = 34
   special = false
 }
@@ -10,7 +11,7 @@ resource "aws_elasticache_replication_group" "redis" {
   at_rest_encryption_enabled    = var.at_rest_encryption_enabled
   transit_encryption_enabled    = var.transit_encryption_enabled
   multi_az_enabled              = var.multi_az_enabled
-  auth_token                    = var.transit_encryption_enabled ? var.auth_token != null ? var.auth_token : random_string.redis_password.result : null
+  auth_token                    = var.transit_encryption_enabled ? var.auth_token != null ? var.auth_token : random_string.redis_password[0].result : null
   engine                        = var.engine
   engine_version                = var.engine_version
   kms_key_id                    = var.kms_key_id
