@@ -9,7 +9,7 @@ resource "aws_ssm_parameter" "redis_password" {
   name        = "/redis/${var.environment_name}-${var.name}/PASSWORD"
   description = "Redis Password"
   type        = "SecureString"
-  value       = random_string.redis_password.result
+  value       = random_string.redis_password[0].result
 
   lifecycle {
     ignore_changes = [value]
