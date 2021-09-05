@@ -112,3 +112,7 @@ variable "subnet_group_ids" {
   type        = list(any)
   default     = []
 }
+
+variable "vpc_id" {
+  type = string
+}

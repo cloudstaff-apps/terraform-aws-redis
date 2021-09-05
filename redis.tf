@@ -26,7 +26,7 @@ resource "aws_elasticache_replication_group" "redis" {
   parameter_group_name          = var.parameter_group_name
 
   tags = {
-    "Name"    = "${local.workspace.account_name}-redis"
-    "EnvName" = local.workspace.environment_name
+    "Name"    = var.name
+    "EnvName" = var.environment_name
   }
 }
