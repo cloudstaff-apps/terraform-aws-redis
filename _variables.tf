@@ -17,9 +17,9 @@ variable "transit_encryption_enabled" {
   default = false
 }
 
-variable "auth_token" {
-  default = ""
-}
+# variable "auth_token" {
+#   default = ""
+# }
 
 variable "multi_az_enabled" {
   default = false
