@@ -4,6 +4,6 @@ resource "aws_elasticache_subnet_group" "redis" {
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name = subnet_name
+    Name = var.subnet_group_name
   }
 }
