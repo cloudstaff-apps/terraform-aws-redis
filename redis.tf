@@ -13,7 +13,7 @@ resource "aws_elasticache_replication_group" "redis" {
   auth_token                    = var.transit_encryption_enabled ? var.auth_token != "" ? var.auth_token : random_string.redis_password.result : ""
   engine                        = var.engine
   engine_version                = var.engine_version
-  kms_key_id                    = kms_key_id
+  kms_key_id                    = var.kms_key_id
   maintenance_window            = var.maintenance_window
   node_type                     = var.node_type
   notification_topic_arn        = var.notification_topic_arn
