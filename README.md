@@ -31,7 +31,7 @@
 | engine | n/a | `string` | n/a | yes |
 | engine\_version | n/a | `string` | n/a | yes |
 | environment\_name | Environment name to use as a prefix to this Redis | `string` | n/a | yes |
-| kms\_key\_id | KMS Key ARN to use a CMK instead of default shared key | `string` | `""` | no |
+| kms\_key\_id | KMS Key ARN to use a CMK instead of default shared key | `any` | `null` | no |
 | maintenance\_window | Specifies the weekly time range for when maintenance on the cache cluster is performed | `string` | `"sun:05:00-sun:07:00"` | no |
 | multi\_az\_enabled | n/a | `bool` | `false` | no |
 | name | Name of this Redis | `string` | n/a | yes |
@@ -42,9 +42,10 @@
 | port | Port number for this Redis | `number` | `6379` | no |
 | snapshot\_retention\_limit | The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them | `number` | `0` | no |
 | snapshot\_window | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period | `string` | `"03:00-04:00"` | no |
-| subnet\_group\_ids | List of Subnet IDs for the RDS Subnet Group | `list(any)` | `[]` | no |
 | subnet\_group\_name | The name of the cache subnet group to be used for the replication group | `string` | n/a | yes |
+| subnet\_ids | List of Subnet IDs for the RDS Subnet Group | `list(any)` | `[]` | no |
 | transit\_encryption\_enabled | n/a | `bool` | `false` | no |
+| vpc\_id | n/a | `string` | n/a | yes |
 
 ## Outputs
 

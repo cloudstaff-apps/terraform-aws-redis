@@ -41,8 +41,7 @@ variable "port" {
 
 variable "kms_key_id" {
   description = "KMS Key ARN to use a CMK instead of default shared key"
-  type        = string
-  default     = ""
+  default     = null
 }
 
 variable "maintenance_window" {
