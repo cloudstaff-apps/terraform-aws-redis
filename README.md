@@ -1,7 +1,66 @@
-# terraform-aws-rds
+# terraform-aws-redis
 
 [![Lint Status](https://github.com/DNXLabs/terraform-aws-rds/workflows/Lint/badge.svg)](https://github.com/DNXLabs/terraform-aws-rds/actions)
 [![LICENSE](https://img.shields.io/github/license/DNXLabs/terraform-aws-redis)](https://github.com/DNXLabs/terraform-aws-redis/blob/master/LICENSE)
+
+## Usage
+```
+cache:
+      redis:
+        - name: namexyz
+          environment_name: dev
+          ecs_cluster_names:
+            - "dev-apps"
+          node_type: cache.t2.micro
+          parameter_group_name: default.redis6.x
+          engine_version: 6.x
+          transit_encryption_enabled: false
+          enabled: true
+```
+
+```hcl
+resource "aws_kms_key" "redis_key" {}
+
+resource "aws_kms_alias" "redis_alias" {
+  name          = "alias/redis-${local.workspace.environment_name}"
+  target_key_id = aws_kms_key.redis_key.key_id
+}
+
+module "cache_redis" {
+  source                        = "git::https://github.com/DNXLabs/terraform-aws-redis.git"
+  for_each                      = { for redis in local.workspace.cache.redis : redis.name => redis }
+  
+  name                          = "redis-${each.value.environment_name}"
+  environment_name              = each.value.environment_name
+  automatic_failover_enabled    = try(each.value.automatic_failover_enabled, false)
+  at_rest_encryption_enabled    = try(each.value.at_rest_encryption_enabled, false)
+  transit_encryption_enabled    = try(each.value.transit_encryption_enabled, false)
+  multi_az_enabled              = try(each.value.multi_az_enabled, false)
+  engine                        = try(each.value.engine, "redis")
+  engine_version                = each.value.engine_version
+  kms_key_id                    = try(each.value.at_rest_encryption_enabled, false ) ? aws_kms_key.redis_key.arn : ""
+  maintenance_window            = try(each.value.maintenance_window, "sun:05:00-sun:07:00")
+  node_type                     = each.value.node_type
+  notification_topic_arn        = try(each.value.notification_topic_arn, "")
+  number_cache_clusters         = try(each.value.number_cache_clusters, 1)
+  port                          = try(each.value.port, 6379)
+  snapshot_retention_limit      = try(each.value.snapshot_retention_limit, 0)
+  snapshot_window               = try(each.value.snapshot_window, "03:00-04:00")
+  parameter_group_name          = each.value.parameter_group_name
+  create_subnet_group           = try(each.value.create_subnet_group, true)
+  subnet_group_name             = "${each.value.environment_name}-cachesubnet"
+  
+  allow_security_group_ids = concat(
+    [for cluster_name in try(each.value.ecs_cluster_names, []) : module.ecs_cluster[cluster_name].ecs_nodes_secgrp_id], []
+  )
+
+  allow_cidrs        = try(each.value.allow_cidrs, [local.common.vpn_cidr])
+  subnet_ids         = data.aws_subnet_ids.secure.ids
+  vpc_id             = data.aws_vpc.selected.id
+  
+}
+```
+
 
 <!--- BEGIN_TF_DOCS --->
 
