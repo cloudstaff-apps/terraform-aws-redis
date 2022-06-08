@@ -1,9 +1,9 @@
 resource "aws_security_group" "redis" {
-  name   = "redis-${var.environment_name}-${var.name}"
+  name   = var.name
   vpc_id = var.vpc_id
 
   tags = {
-    Name = "redis-${var.environment_name}-${var.name}"
+    Name = var.name
   }
 
   lifecycle {
