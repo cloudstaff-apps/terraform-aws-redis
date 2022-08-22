@@ -5,8 +5,8 @@ resource "random_string" "redis_password" {
 }
 
 resource "aws_elasticache_replication_group" "redis" {
-  replication_group_id          = var.name
-  replication_group_description = var.name
+  replication_group_id          = {var.environment_name}-{var.name}
+  replication_group_description = {var.environment_name}-{var.name}
   automatic_failover_enabled    = var.automatic_failover_enabled
   at_rest_encryption_enabled    = var.at_rest_encryption_enabled
   transit_encryption_enabled    = var.transit_encryption_enabled
@@ -29,6 +29,6 @@ resource "aws_elasticache_replication_group" "redis" {
 
   tags = {
     "Name"    = var.name
-    "EnvName" = var.environment_name
+    "Env"     = var.environment_name
   }
 }
